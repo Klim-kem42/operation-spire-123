@@ -111,8 +111,19 @@ body {
 
 		<script src="OperationSpire123.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":["--main-pack","https://drive.google.com/uc?export=download&id=1gk8uHIp0a10jq7N-sLlE37eXl8k6yp17"],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"OperationSpire123","experimentalVK":false,"fileSizes":{"OperationSpire123.pck":428397420,"OperationSpire123.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"OperationSpire123","experimentalVK":false,"fileSizes":{"OperationSpire123.pck":428397420,"OperationSpire123.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
+
+// Override fetch to redirect .pck requests to Google Drive
+const originalFetch = window.fetch;
+window.fetch = function(url, options) {
+	if (typeof url === 'string' && url.includes('OperationSpire123.pck')) {
+		console.log('Redirecting .pck request to Google Drive');
+		return originalFetch('https://drive.google.com/uc?export=download&id=1gk8uHIp0a10jq7N-sLlE37eXl8k6yp17', options);
+	}
+	return originalFetch(url, options);
+};
+
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
